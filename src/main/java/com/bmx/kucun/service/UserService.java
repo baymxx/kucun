@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
  * @Author: code generator
  * @Date: 2022/5/12
  */
-@Service
 public interface  UserService {
 
     User getByUserName(String userName);

@@ -12,7 +12,7 @@ import java.io.Serializable;
 @ApiModel("响应信息主体")
 public class R<T> implements Serializable {
     private static final long serialVersionUID = 1L;
-    @ApiModelProperty("返回标记：成功标记=0，失败标记=1")
+    @ApiModelProperty("返回标记：成功标记=200，失败标记=500")
     private int code;
     @ApiModelProperty("返回信息")
     private String msg;

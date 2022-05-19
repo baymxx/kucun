@@ -2,6 +2,7 @@ package com.bmx.kucun.handler;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import java.io.IOException;
  * @Date: 2022/5/13
  * @description 认证信息失效（未认证或者认证信息过期）处理器
  */
+@Component
 public class RestfulAuthenticationEntryPoint implements AuthenticationEntryPoint{
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {

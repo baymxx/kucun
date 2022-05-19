@@ -3,6 +3,7 @@ package com.bmx.kucun.service.impl;
 import com.bmx.kucun.entity.User;
 import com.bmx.kucun.service.UserService;
 import com.bmx.kucun.utils.JwtUtils;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.List;
  * @Author: code generator
  * @Date: 2022/5/12
  */
+
+@Service
 public class UserServiceImpl implements UserService {
     @Override
     public User getByUserName(String userName) {
