@@ -1,5 +1,7 @@
 package com.bmx.kucun.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -8,21 +10,27 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.List;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
- * @Author: code generator
- * @Date: 2022/5/12
+ * <p>
+ * 
+ * </p>
+ *
+ * @author yuwen
+ * @since 2022-05-26
  */
+@TableName("users")
 @Data
-@TableName("mall_cloud_store")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "用户")
-public class User extends Model<User> {
+public class UsersEntity extends Model<UsersEntity> {
+
     private static final long serialVersionUID = 1L;
 
     /**
-     *
+     * id
      */
     @TableId
     @ApiModelProperty(value="主键Id")
@@ -41,16 +49,10 @@ public class User extends Model<User> {
     private String password;
 
     /**
-     * 所属店铺id
+     * 店铺id
      */
-    @ApiModelProperty(value="所属店铺id")
+    @ApiModelProperty(value="店铺id")
     private Integer shopId;
-
-    /**
-     * 所属店铺名
-     */
-    @ApiModelProperty(value="所属店铺名")
-    private String shopName;
 
     /**
      * 角色id
@@ -59,15 +61,28 @@ public class User extends Model<User> {
     private Integer roleId;
 
     /**
-     * 角色名
+     * 电话
      */
-    @ApiModelProperty(value="角色名")
-    private String authorities;
+    @ApiModelProperty(value="电话")
+    private String phone;
 
-    public User(Integer id, String userName, String password, String authorities) {
-        this.id = id;
-        this.username = userName;
-        this.password = password;
-        this.authorities = authorities;
-    }
+    /**
+     * 昵称
+     */
+    @ApiModelProperty(value="昵称")
+    private String nickname;
+
+    /**
+     * 创建时间
+     */
+    @ApiModelProperty(value="创建时间")
+    private LocalDateTime createTime;
+
+    /**
+     * 更新时间
+     */
+    @ApiModelProperty(value="更新时间")
+    private LocalDateTime updateTime;
+
+
 }

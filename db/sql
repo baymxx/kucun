@@ -1,0 +1,94 @@
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户名',
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
+  `shop_id` int DEFAULT NULL COMMENT '店铺id',
+  `role_id` int DEFAULT NULL COMMENT '角色id',
+  `phone` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '电话',
+  `nickname` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '昵称',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `shops` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `shop_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '店铺名',
+  `addr` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '地址',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `shop_goods_relation` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `sid` int NOT NULL COMMENT '店铺id',
+  `gid` int NOT NULL COMMENT '商品id',
+  `nums` int NOT NULL DEFAULT '0' COMMENT '数量',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `roles` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色名',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `imgs` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '图片名',
+  `extension` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '后缀、拓展名',
+  `base64` longblob NOT NULL COMMENT '图片',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `goods` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品名',
+  `type` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '类型',
+  `color` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '颜色',
+  `weight` double(10,2) DEFAULT NULL COMMENT '重量',
+  `money` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '价格',
+  `size` double DEFAULT NULL COMMENT '尺寸',
+  `texture` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '材质',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='商品表';
+
+CREATE TABLE `approve_goods_relation` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `approve_id` int DEFAULT NULL COMMENT '调货单id',
+  `gid` int DEFAULT NULL COMMENT '物品id',
+  `goods_num` int DEFAULT NULL COMMENT '调货数量',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='调货物品表';
+
+CREATE TABLE `approve` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `out_sid` int NOT NULL COMMENT '调出店铺id',
+  `in_sid` int NOT NULL COMMENT '调入店铺id',
+  `proposer_id` int NOT NULL COMMENT '申请人id',
+  `approve_id` int NOT NULL COMMENT '审批人id',
+  `remake` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '审批备注',
+  `status` int DEFAULT '0' COMMENT '0审批中1通过2拒绝',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='审批表';
+
+CREATE TABLE `record` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `goods_id` int DEFAULT NULL COMMENT '商品id',
+  `type` int DEFAULT NULL COMMENT '0：出售1：入库2调入3：调出',
+  `shop_id` int DEFAULT NULL COMMENT '店铺id',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

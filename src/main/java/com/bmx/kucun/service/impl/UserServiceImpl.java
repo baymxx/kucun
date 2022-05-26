@@ -17,17 +17,22 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Override
     public User getByUserName(String userName) {
-        List<String> authorities=new ArrayList<>();
-        authorities.add("ALL");
-        User user=new User(1,"bmx","123",authorities);
+
+        User user=new User(1,"bmx","123","1");
         return user;
     }
 
     @Override
     public String login(String userName, String password) {
        if(userName.equals("bmx") && password.equals("123")){
-           return JwtUtils.createJwtToken(userName);
+           return JwtUtils.createJwtToken(getByUserName(userName));
        }
        return "";
+    }
+
+    @Override
+    public User getUser(String token) {
+
+        return JwtUtils.getJwtTokenClaimValue(token);
     }
 }

@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.bmx.kucun.entity.User;
 import com.bmx.kucun.service.UserService;
 import com.bmx.kucun.utils.JwtUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -40,17 +41,19 @@ public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             String tokenStr = request.getHeader("token");
             if (StrUtil.isNotBlank(tokenStr)) {
-                String tokenObj = JwtUtils.getJwtTokenClaimValue(tokenStr);
+                String tokenObj = JwtUtils.getJwtUsername(tokenStr);
                 if (StrUtil.isNotBlank(tokenObj)) {
                     User user = userService.getByUserName(tokenObj);
+
                     if (user != null) {
                         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                        if (user.getAuthorities() != null && user.getAuthorities().size() > 0) {
-                            authorities = user.getAuthorities().stream().map(a -> new SimpleGrantedAuthority(a)).collect(Collectors.toList());
+                        if (StringUtils.isNotBlank(user.getAuthorities())) {
+                            authorities.add(new SimpleGrantedAuthority(user.getAuthorities()));
+//                            authorities = user.getAuthorities().stream().map(a -> ).collect(Collectors.toList());
                         }
                         //设置当前上下文的认证信息
-                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(tokenObj, "", authorities);
-                        authentication.setDetails(user);
+                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), tokenStr, authorities);
+//                        authentication.setDetails(user);
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }

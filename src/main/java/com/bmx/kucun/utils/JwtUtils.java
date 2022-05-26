@@ -1,46 +1,63 @@
 package com.bmx.kucun.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.bmx.kucun.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @Author: code generator
  * @Date: 2022/5/11
  */
 public class JwtUtils {
-    private static final String jwtClaimKey="tokenObj-key";
-    private static final String jwtSecretKey="jwtSecret-Key";
+    private static final String jwtClaimKey="userJson";
+    private static final String jwtSecretKey="bmxxx";
 
     /**
      * 生成jwt的token串
-     * @param value
+     * @param user
      * @return
      */
-    public static String createJwtToken(String value)
+    public static String createJwtToken(User user)
     {
         HashMap<String,Object> claims=new HashMap<>();
-        claims.put(jwtClaimKey,value);
+        String userStr =JSON.toJSONString(user);
+        claims.put(jwtClaimKey,userStr);
+        claims.put("role",user.getAuthorities());
         Calendar calendar=Calendar.getInstance();
-        calendar.add(Calendar.HOUR_OF_DAY,24);//当前时间添加24是小时,即token在24小时后过期
+        calendar.add(Calendar.DATE,30);//30天过期
         return Jwts.builder()
                 .setClaims(claims)//设置载荷部分
+                .setSubject(user.getUsername())
                 .setExpiration(calendar.getTime())//设置过期时间
                 .signWith(SignatureAlgorithm.HS512, jwtSecretKey)//设置加密算法
                 .compact();
     }
 
+
+
+    public static String getJwtUsername(String token){
+        Claims claims = Jwts.parser().setSigningKey(jwtSecretKey).parseClaimsJws(token).getBody();
+        return claims.getSubject();
+    }
+
+    public static List<String> getJwtRoles(String token){
+        Claims claims = Jwts.parser().setSigningKey(jwtSecretKey).parseClaimsJws(token).getBody();
+        return claims.get("role",List.class);
+    }
     /**
      * 从jwttoken串中获取载荷值
      * @param tokenStr
      * @return
      */
-    public static String getJwtTokenClaimValue(String tokenStr)
+    public static User getJwtTokenClaimValue(String tokenStr)
     {
-        String result=null;
+        User result=null;
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(jwtSecretKey)
@@ -50,11 +67,15 @@ public class JwtUtils {
             if(claims.getExpiration().compareTo(Calendar.getInstance().getTime())>0)
             {
                 //token未过期
-                result=claims.get(jwtClaimKey,String.class);
+                String userStr = claims.get(jwtClaimKey ,String.class);
+                result = JSON.parseObject(userStr,User.class);
+
             }
         } catch (Exception ex) {
             System.out.println(ex);
         }
         return result;
     }
+
+
 }

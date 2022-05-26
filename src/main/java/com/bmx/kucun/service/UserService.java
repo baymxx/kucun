@@ -12,4 +12,7 @@ public interface  UserService {
     User getByUserName(String userName);
 
     String login(String userName,String password);
+
+    User getUser(String str);
+
 }
